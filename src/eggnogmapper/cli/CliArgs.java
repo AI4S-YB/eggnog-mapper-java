@@ -1,0 +1,54 @@
+package eggnogmapper.cli;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CliArgs {
+    public boolean help;
+    public boolean version;
+    public String mode = "diamond";
+    public String inputPath;
+    public String inputType = "proteins";
+    public boolean translate = false;
+    public String transTable;
+    public String outputPrefix;
+    public String outputDir = System.getProperty("user.dir");
+    public String dataDir;
+    public String dmndDb;
+    public String eggnogDb;
+    public String taxDb;
+    public String diamondBin;
+    public int cpu = 1;
+    public String tempDir = System.getProperty("user.dir");
+    public Double evalue = 0.001d;
+    public Double score;
+    public Double pident;
+    public Double queryCover;
+    public Double subjectCover;
+    public String sensmode = "sensitive";
+    public String dmndIterate = "yes";
+    public String dmndAlgo = "auto";
+    public boolean dmndIgnoreWarnings = false;
+    public String matrix;
+    public Integer dmndFrameshift;
+    public Integer gapopen;
+    public Integer gapextend;
+    public Double dmndBlockSize;
+    public Integer dmndIndexChunks;
+    public boolean outfmtShort = false;
+    public boolean noAnnot = false;
+    public boolean reportOrthologs = false;
+    public boolean noFileComments = false;
+    public Double seedOrthologEvalue = 0.001d;
+    public Double seedOrthologScore;
+    public String taxScopeMode = "inner_narrowest";
+    public String taxScope = "auto";
+    public String targetOrthologs = "all";
+    public String targetTaxa;
+    public String excludedTaxa;
+    public String taxScopeVarsFile;
+    public String goEvidence = "non-electronic";
+    public boolean resume = false;
+    public boolean override = false;
+    public final List<String> rawArgs = new ArrayList<String>();
+}
