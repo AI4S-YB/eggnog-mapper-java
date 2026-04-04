@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="eggnog-mapper-java" default="default" basedir=".">
+    <description>Builds, tests, and runs the eggnog-mapper-java project.</description>
+
+    <import file="nbproject/build-impl.xml"/>
+
+    <property name="project.lib.dir" location="lib"/>
+
+    <target name="fat-jar" depends="compile">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.dir}/eggnog-mapper-java-fat.jar" duplicate="preserve">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+            <fileset dir="${build.classes.dir}"/>
+            <zipgroupfileset dir="${project.lib.dir}" includes="sqlite-jdbc-*.jar"/>
+        </jar>
+    </target>
+</project>

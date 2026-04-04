@@ -85,9 +85,9 @@ Artifacts:
 
 Note:
 
-- The SQLite JDBC driver is not vendored in this repository.
-- NetBeans `project.properties` currently points to a shared local copy at `D:\NetbeansProject2\TBtools\lib\sqlite-jdbc-3.20.1.jar`.
-- If you build on another machine, update that path or provide an equivalent JAR.
+- The repository now includes the SQLite JDBC driver under `lib/`.
+- NetBeans and Ant are configured to use the vendored `lib/sqlite-jdbc-3.46.1.3.jar` by default.
+- `nbproject/private/` remains ignored and should stay machine-local.
 
 ## Quick Start
 
