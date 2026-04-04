@@ -145,6 +145,9 @@ public class CliParser {
         if (out.outputPrefix == null || out.outputPrefix.isEmpty()) {
             throw new IllegalArgumentException("Missing -o/--output");
         }
+        if (out.tempDir == null || out.tempDir.trim().isEmpty()) {
+            out.tempDir = new File(out.outputDir, ".tmp").getPath();
+        }
         if (!"diamond".equalsIgnoreCase(out.mode)) {
             throw new IllegalArgumentException("Only -m diamond is supported in eggnog_java");
         }
@@ -179,28 +182,42 @@ public class CliParser {
         System.out.println("Usage:");
         System.out.println("  java Main -m diamond -i <input.fa> --itype proteins|CDS -o <out_prefix>");
         System.out.println("Options:");
+        System.out.println("  -h, --help                show this help");
+        System.out.println("  -v, --version             show version");
+        System.out.println("  FASTA query IDs are normalized to the first whitespace-delimited token in each header");
         System.out.println("  --data_dir <dir>          eggnog-mapper data directory");
         System.out.println("  --output_dir <dir>        output directory");
         System.out.println("  --dmnd_db <path>          DIAMOND database path");
+        System.out.println("  --eggnog_db <path>        annotation database path");
+        System.out.println("  --tax_db <path>           taxonomy database path");
         System.out.println("  --diamond_bin <path>      diamond executable path");
         System.out.println("  --cpu <n>                 worker threads; 0 means all CPUs");
-        System.out.println("  --temp_dir <dir>          temp directory");
+        System.out.println("  --temp_dir <dir>          temp directory (default: <output_dir>/.tmp)");
         System.out.println("  --translate               when --itype CDS, translate input and run blastp");
         System.out.println("  --trans_table <code>      translation table code");
         System.out.println("  --sensmode <mode>         default|fast|mid-sensitive|sensitive|more-sensitive|very-sensitive|ultra-sensitive");
         System.out.println("  --dmnd_iterate <yes|no>   enable or disable diamond --iterate");
         System.out.println("  --dmnd_algo <mode>        auto|0|1|ctg");
         System.out.println("  --dmnd_ignore_warnings    pass --ignore-warnings to diamond");
+        System.out.println("  --matrix <name>           DIAMOND substitution matrix");
+        System.out.println("  --dmnd_frameshift <int>   pass --frameshift to diamond");
+        System.out.println("  --gapopen <int>           pass --gapopen to diamond");
+        System.out.println("  --gapextend <int>         pass --gapextend to diamond");
+        System.out.println("  --block_size <float>      pass --block-size to diamond");
+        System.out.println("  --index_chunks <int>      pass -c to diamond");
         System.out.println("  --outfmt_short            use 4-column seed output");
         System.out.println("  --evalue <v> --score <v> --pident <v> --query_cover <v> --subject_cover <v>");
         System.out.println("  --seed_ortholog_evalue <v> --seed_ortholog_score <v>");
         System.out.println("  --tax_scope_mode <mode>   broadest|inner_broadest|inner_narrowest|narrowest");
         System.out.println("  --tax_scope <ids/file>    comma-separated taxa IDs/names, built-in scope, or file");
+        System.out.println("  --tax_scope_vars <path>   override tax scope vars file");
         System.out.println("  --target_orthologs <type> all|one2one|one2many|many2many|many2one");
         System.out.println("  --target_taxa <ids>       comma-separated taxa IDs or names");
         System.out.println("  --excluded_taxa <ids>     comma-separated taxa IDs or names");
         System.out.println("  --go_evidence <mode>      experimental|non-electronic|all");
         System.out.println("  --report_orthologs        output orthologs file");
+        System.out.println("  --no_file_comments        suppress ## metadata comments in outputs");
+        System.out.println("  --annot                   force annotation on");
         System.out.println("  --resume                  reuse existing hits and append missing annotations");
         System.out.println("  --override                overwrite existing outputs");
         System.out.println("  --no_annot                skip annotation");

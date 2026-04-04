@@ -19,7 +19,7 @@ public class CliArgs {
     public String taxDb;
     public String diamondBin;
     public int cpu = 1;
-    public String tempDir = System.getProperty("user.dir");
+    public String tempDir;
     public Double evalue = 0.001d;
     public Double score;
     public Double pident;

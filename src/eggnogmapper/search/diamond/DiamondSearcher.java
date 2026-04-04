@@ -21,6 +21,7 @@ public class DiamondSearcher implements Searcher {
     private final CliArgs args;
     private final List<String> executedCommands = new ArrayList<String>();
     private File workDir;
+    private File normalizedQueryFile;
     private File translatedQueryFile;
 
     public DiamondSearcher(CliArgs args) {
@@ -50,29 +51,34 @@ public class DiamondSearcher implements Searcher {
     public void clear() {
         deleteRecursively(workDir);
         workDir = null;
+        normalizedQueryFile = null;
         translatedQueryFile = null;
     }
 
     private void runDiamond(String inputPath, String hitsPath) throws IOException, InterruptedException {
         String itype = args.inputType.toLowerCase();
         String tool;
-        String queryPath = inputPath;
         prepareWorkDir();
+        translatedQueryFile = null;
 
         if ("proteins".equals(itype)) {
             tool = "blastp";
+            normalizedQueryFile = new File(workDir, "normalized_query.fa");
+            FastaUtils.rewriteFastaWithSimplifiedIds(inputPath, normalizedQueryFile.getAbsolutePath());
         } else if ("cds".equals(itype)) {
+            normalizedQueryFile = new File(workDir, "normalized_query.fna");
+            FastaUtils.rewriteFastaWithSimplifiedIds(inputPath, normalizedQueryFile.getAbsolutePath());
             if (args.translate) {
                 tool = "blastp";
                 translatedQueryFile = new File(workDir, "translated_query.faa");
-                FastaUtils.translateCdsFile(inputPath, translatedQueryFile.getAbsolutePath(), args.transTable);
-                queryPath = translatedQueryFile.getAbsolutePath();
+                FastaUtils.translateCdsFile(normalizedQueryFile.getAbsolutePath(), translatedQueryFile.getAbsolutePath(), args.transTable);
             } else {
                 tool = "blastx";
             }
         } else {
             throw new IllegalArgumentException("eggnog_java currently supports --itype proteins|CDS for diamond mode");
         }
+        String queryPath = translatedQueryFile != null ? translatedQueryFile.getAbsolutePath() : normalizedQueryFile.getAbsolutePath();
 
         List<String> cmd = new ArrayList<String>();
         cmd.add(args.diamondBin);

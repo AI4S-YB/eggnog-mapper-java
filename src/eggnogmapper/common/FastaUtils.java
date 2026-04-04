@@ -34,6 +34,15 @@ public final class FastaUtils {
     private FastaUtils() {
     }
 
+    public static String simplifyHeaderId(String header) {
+        String normalized = header == null ? "" : header.trim();
+        if (normalized.isEmpty()) {
+            return "";
+        }
+        String[] parts = normalized.split("\\s+", 2);
+        return parts[0];
+    }
+
     public static LinkedHashMap<String, String> readFasta(String path) throws IOException {
         LinkedHashMap<String, String> out = new LinkedHashMap<String, String>();
         BufferedReader br = new BufferedReader(new FileReader(path));
@@ -50,7 +59,7 @@ public final class FastaUtils {
                     if (currentName != null) {
                         out.put(currentName, seq.toString());
                     }
-                    currentName = line.substring(1).trim().split("\\s+")[0];
+                    currentName = simplifyHeaderId(line.substring(1));
                     seq = new StringBuilder();
                 } else {
                     if (currentName == null) {
@@ -66,6 +75,22 @@ public final class FastaUtils {
             br.close();
         }
         return out;
+    }
+
+    public static void rewriteFastaWithSimplifiedIds(String source, String outfile) throws IOException {
+        Map<String, String> seqs = readFasta(source);
+        BufferedWriter bw = new BufferedWriter(new FileWriter(outfile));
+        try {
+            for (Map.Entry<String, String> e : seqs.entrySet()) {
+                bw.write(">");
+                bw.write(e.getKey());
+                bw.write("\n");
+                bw.write(e.getValue());
+                bw.write("\n");
+            }
+        } finally {
+            bw.close();
+        }
     }
 
     public static void translateCdsFile(String source, String outfile, String tableCode) throws IOException {
